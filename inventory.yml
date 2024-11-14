@@ -1,0 +1,18 @@
+all:
+  vars:
+    username: vagrant
+  hosts:
+    machine1:
+      ansible_host: 192.168.121.101
+    # machine2:
+    #   ansible_host: 192.168.121.102
+
+  # children:
+  #   nginx_servers:
+  #     hosts:
+  #       machine1:
+  #       machine2:
+  #   docker_servers:
+  #     hosts:
+  #       machine1:
+  #       machine2:

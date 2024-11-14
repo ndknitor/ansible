@@ -1,0 +1,41 @@
+# install_elk_stack.yml
+- name: Install ELK Stack on Docker
+  hosts: elk_host
+  become: true
+
+  tasks:
+    - name: Ensure Docker is started and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create ELK directory for Docker Compose
+      file:
+        path: /opt/elk
+        state: directory
+        mode: '0755'
+
+    - name: Create docker-compose.yml for ELK Stack
+      copy:
+        dest: /opt/elk/docker-compose.yml
+        content: |
+
+
+    - name: Create pipeline directory for Logstash
+      file:
+        path: /opt/elk/logstash/pipeline
+        state: directory
+        mode: '0755'
+
+    - name: Add Logstash configuration file
+      copy:
+        src: ./files/install_elk/
+        dest: /opt/elk/logstash/pipeline/logstash.conf
+
+
+    - name: Start ELK Stack using Docker Compose
+      shell: |
+        docker-compose up -d
+      args:
+        chdir: /opt/elk

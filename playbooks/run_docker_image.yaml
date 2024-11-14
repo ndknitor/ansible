@@ -1,0 +1,27 @@
+- name: Run Docker image on Docker
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Ensure Docker is started and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create directory for Docker Compose
+      file:
+        path: /opt/asptemplate
+        state: directory
+        mode: '0755'
+
+    - name: Create docker-compose.yaml
+      copy:
+        src: ../files/run_docker_image/docker-compose.yaml 
+        dest: /opt/asptemplate/docker-compose.yaml
+
+    - name: Start image using Docker Compose
+      shell: |
+        docker compose up -d
+      args:
+        chdir: /opt/asptemplate

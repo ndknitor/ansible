@@ -1,0 +1,39 @@
+# install_trivy.yml
+- name: Trivy Installation Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt package list
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Add Trivy GPG key
+      ansible.builtin.apt_key:
+        url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Add Trivy repository
+      ansible.builtin.apt_repository:
+        repo: "deb https://aquasecurity.github.io/trivy-repo/deb generic main"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Trivy
+      apt:
+        name: trivy
+        state: present
+
+    - name: Verify Trivy installation
+      command: trivy --version
+      register: trivy_version
+      ignore_errors: true
+
+    - name: Display Trivy version
+      debug:
+        var: trivy_version.stdout

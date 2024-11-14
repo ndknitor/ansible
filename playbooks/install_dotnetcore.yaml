@@ -1,0 +1,36 @@
+- name: .NET Core Installation Playbook
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Download Microsoft package repository .deb file
+      get_url:
+        url: https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb
+        dest: /tmp/packages-microsoft-prod.deb
+
+    - name: Install Microsoft package repository .deb file
+      ansible.builtin.apt:
+        deb: /tmp/packages-microsoft-prod.deb
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install .NET 6 SDK
+      apt:
+        name: dotnet-sdk-6.0
+        state: present
+
+    - name: Install .NET 6 Runtime
+      apt:
+        name: aspnetcore-runtime-6.0
+        state: present
+
+    - name: Verify .NET installation
+      command: dotnet --version
+      register: dotnet_version
+      ignore_errors: true
+
+    - name: Display .NET version
+      debug:
+        var: dotnet_version.stdout
