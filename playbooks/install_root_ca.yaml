@@ -1,0 +1,29 @@
+---
+- name: Install root CA certificate
+  hosts: all
+  become: true
+  tasks:
+    - name: Copy the root CA certificate to the system
+      copy:
+        src: ./files/install_root_ca/rootCA.crt   # Local path to your root CA certificate
+        dest: /usr/local/share/ca-certificates/rootCA.crt
+        mode: '0644'
+
+    - name: Update CA certificates
+      command: update-ca-certificates
+      when: ansible_os_family == "Debian"  # For Debian-based systems like Ubuntu
+
+    - name: Redhat-based systems update CA certificates
+      command: update-ca-trust extract
+      when: ansible_os_family == "RedHat"  # For RedHat/CentOS-based systems
+
+    - name: Verify the root CA is installed (optional)
+      command: openssl x509 -in /usr/local/share/ca-certificates/rootCA.crt -noout -text
+      register: ca_check
+      failed_when: ca_check.rc != 0
+      changed_when: false
+
+    - name: Show root CA certificate info (optional)
+      debug:
+        msg: "Root CA certificate installed successfully!"
+      when: ca_check.rc == 0
