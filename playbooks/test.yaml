@@ -1,0 +1,9 @@
+- name: Test Playbook
+  hosts: all
+  tasks:
+    - name: Create a file
+      ansible.builtin.copy:
+        dest: "/home/vagrant/hello"
+        mode: 400
+        content: |
+          Hello

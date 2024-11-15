@@ -1,0 +1,91 @@
+- name: Install NGINX Prometheus Exporter
+  hosts: all
+  become: true
+  vars:
+    nginx_exporter_version: "0.11.0"
+    nginx_exporter_url: "https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v{{ nginx_exporter_version }}/nginx-prometheus-exporter-{{ nginx_exporter_version }}.linux-amd64.tar.gz"
+    nginx_exporter_install_dir: "/usr/local/bin"
+    nginx_exporter_user: "nginx_exporter"
+    nginx_exporter_listen_port: "9113"
+
+  tasks:
+
+    - name: Install dependencies
+      apt:
+        name: 
+          - wget
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: Create nginx_exporter user
+      user:
+        name: "{{ nginx_exporter_user }}"
+        system: true
+        shell: /usr/sbin/nologin
+
+    - name: Download NGINX Prometheus Exporter
+      get_url:
+        url: "{{ nginx_exporter_url }}"
+        dest: "/tmp/nginx-prometheus-exporter-{{ nginx_exporter_version }}.tar.gz"
+
+    - name: Extract NGINX Prometheus Exporter
+      unarchive:
+        src: "/tmp/nginx-prometheus-exporter-{{ nginx_exporter_version }}.tar.gz"
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Move NGINX Prometheus Exporter binary to /usr/local/bin
+      copy:
+        src: "/tmp/nginx-prometheus-exporter-{{ nginx_exporter_version }}.linux-amd64/nginx-prometheus-exporter"
+        dest: "{{ nginx_exporter_install_dir }}/nginx-prometheus-exporter"
+        mode: "0755"
+
+    - name: Configure NGINX for stub status module
+      blockinfile:
+        path: /etc/nginx/conf.d/stub_status.conf
+        block: |
+          server {
+              listen 127.0.0.1:8080;
+              location /stub_status {
+                  stub_status;
+                  allow 127.0.0.1;
+                  deny all;
+              }
+          }
+        state: present
+      notify: Restart NGINX
+
+    - name: Create systemd service for NGINX Prometheus Exporter
+      copy:
+        dest: /etc/systemd/system/nginx-prometheus-exporter.service
+        content: |
+          [Unit]
+          Description=NGINX Prometheus Exporter
+          After=network.target
+
+          [Service]
+          User={{ nginx_exporter_user }}
+          ExecStart={{ nginx_exporter_install_dir }}/nginx-prometheus-exporter -nginx.scrape-uri=http://127.0.0.1:8080/stub_status
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+      notify: Restart nginx_exporter
+
+    - name: Enable and start the NGINX Prometheus Exporter service
+      systemd:
+        name: nginx-prometheus-exporter
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Restart NGINX
+      systemd:
+        name: nginx
+        state: restarted
+
+    - name: Restart nginx_exporter
+      systemd:
+        name: nginx-prometheus-exporter
+        state: restarted
