@@ -6,7 +6,8 @@ all:
       ansible_host: 192.168.121.101
     # machine2:
     #   ansible_host: 192.168.121.102
-
+    # machine3:
+    #   ansible_host: 192.168.121.103
   # children:
   #   nginx_servers:
   #     hosts:

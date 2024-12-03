@@ -1,0 +1,19 @@
+---
+- name: Setup automation server
+  gather_facts: no
+  tasks:
+
+    - name: Import .NET Core installation playbook
+      ansible.builtin.import_playbook: ../install_dotnetcore.yaml
+
+    - name: Post Server playbook
+      ansible.builtin.import_playbook: ../post_server.yaml
+
+    - name: Import Docker installation playbook
+      ansible.builtin.import_playbook: ../install_docker.yaml
+
+    - name: Import Trivy playbook
+      ansible.builtin.import_playbook: ../install_trivy.yaml
+
+    - name: Import Node Exporter
+      ansible.builtin.import_playbook: ../install_node-exporter.yaml

@@ -1,5 +1,5 @@
 - name: Install Docker on Docker Servers
-  hosts: docker_servers
+  hosts: all
   become: true
   tasks:
     - name: Update apt package list
