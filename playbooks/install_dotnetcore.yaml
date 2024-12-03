@@ -16,14 +16,14 @@
       apt:
         update_cache: yes
 
-    - name: Install .NET 6 SDK
+    - name: Install .NET 8 SDK
       apt:
-        name: dotnet-sdk-6.0
+        name: dotnet-sdk-8.0
         state: present
 
-    - name: Install .NET 6 Runtime
+    - name: Install .NET 8 Runtime
       apt:
-        name: aspnetcore-runtime-6.0
+        name: aspnetcore-runtime-8.0
         state: present
 
     - name: Verify .NET installation
