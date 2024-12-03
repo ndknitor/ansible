@@ -1,5 +1,5 @@
 - name: Install and Start NGINX
-  hosts: nginx_servers
+  hosts: "{{ host_group }}"
   become: true  # Run as sudo
   tasks:
     - name: Update apt package list (Debian/Ubuntu)

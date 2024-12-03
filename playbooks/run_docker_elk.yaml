@@ -1,6 +1,6 @@
 # install_elk_stack.yml
 - name: Install ELK Stack on Docker
-  hosts: elk_host
+  hosts: "{{ host_group }}"
   become: true
 
   tasks:

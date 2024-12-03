@@ -4,16 +4,18 @@ all:
   hosts:
     machine1:
       ansible_host: 192.168.121.101
-    # machine2:
-    #   ansible_host: 192.168.121.102
-    # machine3:
-    #   ansible_host: 192.168.121.103
-  # children:
-  #   nginx_servers:
-  #     hosts:
-  #       machine1:
-  #       machine2:
-  #   docker_servers:
-  #     hosts:
-  #       machine1:
-  #       machine2:
+    machine2:
+      ansible_host: 192.168.121.102
+    machine3:
+      ansible_host: 192.168.121.103
+    machine4:
+      ansible_host: 192.168.121.104
+  children:
+    jenkins_servers:
+      hosts:
+        machine1:
+    k8s_servers:
+      hosts:
+        machine2:
+        machine3:
+        machine4:

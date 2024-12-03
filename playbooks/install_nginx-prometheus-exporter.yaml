@@ -1,5 +1,5 @@
 - name: Install NGINX Prometheus Exporter
-  hosts: all
+  hosts: "{{ host_group }}"
   become: true
   vars:
     nginx_exporter_version: "0.11.0"

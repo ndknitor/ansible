@@ -1,0 +1,9 @@
+- name: Setup Servers
+  hosts: all
+- import_playbook: post_sesrver.yaml
+  vars:
+    host_group: k8s_servers
+
+- import_playbook: install_docker.yaml
+  vars:
+    host_group: k8s_servers

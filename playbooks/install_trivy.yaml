@@ -1,6 +1,6 @@
 # install_trivy.yml
 - name: Trivy Installation Playbook
-  hosts: all
+  hosts: "{{ host_group }}"
   become: true
   tasks:
     - name: Update apt package list

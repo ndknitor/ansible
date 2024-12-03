@@ -1,11 +1,10 @@
 ---
 - name: Disable swap and enable IP forwarding
-  hosts: all
+  hosts: "{{ host_group }}"
   become: yes
   tasks:
     - name: Disable swap temporarily
       ansible.builtin.shell: swapoff -a
-      when: ansible_swaptotal_mb > 0
 
     - name: Disable swap permanently by commenting out swap entry in fstab
       ansible.builtin.lineinfile:

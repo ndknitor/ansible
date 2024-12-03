@@ -1,6 +1,6 @@
 ---
 - name: Install root CA certificate
-  hosts: all
+  hosts: "{{ host_group }}"
   become: true
   tasks:
     - name: Copy the root CA certificate to the system

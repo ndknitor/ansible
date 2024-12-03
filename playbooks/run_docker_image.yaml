@@ -1,5 +1,5 @@
 - name: Run Docker image on Docker
-  hosts: all
+  hosts: "{{ host_group }}"
   become: true
 
   tasks:
