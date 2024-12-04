@@ -1,0 +1,19 @@
+---
+
+# - import_playbook: ./installations/install_docker.yaml
+#   vars:
+#     host_group: jenkins_servers
+
+# - import_playbook: ./installations/install_trivy.yaml
+#   vars:
+#     host_group: jenkins_servers
+
+# - import_playbook: ./installations/install_node-exporter.yaml
+#   vars:
+#     host_group: jenkins_servers
+
+- import_playbook: install_jenkins_agent.yaml
+  vars:
+    host_group: jenkins_agents
+    jenkins_master: 192.168.121.101
+    secret: <secrets>

@@ -19,7 +19,7 @@
     - name: Create docker-compose.yml for ELK Stack
       copy:
         dest: /opt/elk/docker-compose.yml
-        content: |
+        src: ./assets/docker-compose.yaml
 
 
     - name: Create pipeline directory for Logstash
@@ -30,12 +30,21 @@
 
     - name: Add Logstash configuration file
       copy:
-        src: ./files/install_elk/
+        src: ./assets/logstash.conf
         dest: /opt/elk/logstash/pipeline/logstash.conf
 
+    - name: Set working directory globally
+      ansible.builtin.shell: pwd
+      environment:
+        PWD: /opt/elk/
 
     - name: Start ELK Stack using Docker Compose
       shell: |
-        docker-compose up -d
+        docker compose up -d
       args:
         chdir: /opt/elk
+      register: command_output
+
+    - name: Display the command output
+      ansible.builtin.debug:
+        msg: "{{ command_output.stdout }}"

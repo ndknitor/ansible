@@ -17,7 +17,7 @@
 
     - name: Create docker-compose.yaml
       copy:
-        src: ../files/run_docker_image/docker-compose.yaml 
+        src: ../assets/run_docker_image/docker-compose.yaml 
         dest: /opt/asptemplate/docker-compose.yaml
 
     - name: Start image using Docker Compose

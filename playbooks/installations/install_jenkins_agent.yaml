@@ -1,0 +1,83 @@
+---
+- name: Install Jenkins Agent
+  become: yes
+  hosts: "{{ host_group }}"
+  vars:
+    agent_ip: "{{ ansible_host }}"
+    agent_name: "agent_{{ agent_ip | replace('.', '-') }}"
+
+  tasks:
+    - name: Install Java
+      apt:
+        name: openjdk-17-jdk
+        state: present
+
+    - name: Create jenkins user
+      user:
+        name: jenkins
+        system: true
+        shell: /usr/sbin/nologin
+
+    - name: Create Jenkins agent directory
+      file:
+        path: /opt/jenkins_agent
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: '0755'
+
+    - name: Create Jenkins agent directory
+      file:
+        path: /opt/jenkins_agent/root
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: '0755'
+
+    - name: Create Jenkins agent directory
+      file:
+        path: /opt/jenkins_agent/root
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: '0777'
+
+    - name: Download agent.jar from Jenkins Master
+      get_url:
+        url: http://{{ jenkins_master }}:8080/jnlpJars/agent.jar
+        dest: /opt/jenkins_agent/agent.jar
+
+    - name: Create a systemd service for Jenkins agent
+      copy:
+        dest: /etc/systemd/system/jenkins-agent.service
+        content: |
+          [Unit]
+          Description=Jenkins Agent
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/bin/java -jar /opt/jenkins_agent/agent.jar -url http://{{ jenkins_master }}:8080/ -secret {{ secret }} -name "{{ agent_name }}" -webSocket -workDir "/opt/jenkins_agent/root"
+          Restart=always
+          User=jenkins
+
+          [Install]
+          WantedBy=multi-user.target
+
+      notify: Restart Jenkins Agent
+
+    - name: Enable and start Jenkins Agent service
+      systemd:
+        name: jenkins-agent
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Restart Jenkins Agent
+      systemd:
+        name: jenkins-agent
+        state: restarted
+
+    - name: Restart Jenkins Agent
+      systemd:
+        name: jenkins-agent
+        state: restarted

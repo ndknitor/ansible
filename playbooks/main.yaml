@@ -1,0 +1,3 @@
+- import_playbook: ./runs/run_elk/run_elk.yaml
+  vars:
+    host_group: jenkins_servers

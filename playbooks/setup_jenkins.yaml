@@ -1,22 +1,20 @@
 ---
-- name: Setup Jenkins
-  hosts: all
-- import_playbook: install_dotnetcore.yaml
+- import_playbook: ./installations/install_dotnetcore.yaml
   vars:
     host_group: jenkins_servers
 
-- import_playbook: install_docker.yaml
+- import_playbook: ./installations/install_docker.yaml
   vars:
     host_group: jenkins_servers
 
-- import_playbook: install_trivy.yaml
+- import_playbook: ./installations/install_trivy.yaml
   vars:
     host_group: jenkins_servers
 
-# - import_playbook: install_node-exporter.yaml
-#   vars:
-#     host_group: jenkins_servers
+- import_playbook: ./installations/install_node-exporter.yaml
+  vars:
+    host_group: jenkins_servers
 
-- import_playbook: install_jenkins.yaml
+- import_playbook: ./installations/install_jenkins.yaml
   vars:
     host_group: jenkins_servers
