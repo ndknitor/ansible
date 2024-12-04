@@ -1,0 +1,43 @@
+- name: Install Grafana on Docker
+  hosts: "{{ host_group }}"
+  become: true
+
+  tasks:
+    - name: Ensure Docker is started and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create Grafana directory for Docker Compose
+      file:
+        path: /opt/grafana
+        state: directory
+        mode: '0755'
+
+    - name: Create docker-compose.yml for Grafana and Prometheus
+      copy:
+        dest: /opt/grafana/docker-compose.yml
+        src: ./assets/docker-compose.yaml
+
+    - name: Create Prometheus for Grafana
+      file:
+        path: /opt/grafana/prometheus
+        state: directory
+        mode: '0755'
+
+    - name: Add Prometheus configuration file
+      copy:
+        src: ./assets/prometheus.yml
+        dest: /opt/grafana/prometheus/prometheus.yml
+
+    - name: Start Grafana using Docker Compose
+      shell: |
+        docker compose up -d
+      args:
+        chdir: /opt/grafana
+      register: command_output
+
+    - name: Display the command output
+      ansible.builtin.debug:
+        msg: "{{ command_output.stdout }}"
