@@ -1,0 +1,42 @@
+---
+- name: Configure custom DNS server
+  hosts: "{{ host_group }}"
+  become: true
+  vars:
+    dns_servers:
+      - "8.8.8.8"
+      - "8.8.4.4"
+    resolv_conf_path: "/etc/resolv.conf"
+
+  tasks:
+    - name: Backup current resolv.conf
+      ansible.builtin.copy:
+        src: "{{ resolv_conf_path }}"
+        dest: "{{ resolv_conf_path }}.bak"
+        remote_src: yes
+        mode: '0644'
+      when: ansible_facts.os_family == "Debian"
+
+    - name: Set custom DNS servers for Debian-based systems
+      ansible.builtin.lineinfile:
+        path: "{{ resolv_conf_path }}"
+        line: "nameserver {{ item }}"
+        create: yes
+        state: present
+      with_items: "{{ dns_servers }}"
+      when: ansible_facts.os_family == "Debian"
+
+    - name: Configure custom DNS in NetworkManager for CentOS/RHEL
+      ansible.builtin.copy:
+        dest: "/etc/NetworkManager/conf.d/dns_servers.conf"
+        content: |
+          [main]
+          dns=dnsmasq
+          dns-search={{ dns_servers | join(' ') }}
+      when: ansible_facts.os_family == "RedHat"
+
+    - name: Restart NetworkManager (CentOS/RHEL)
+      ansible.builtin.systemd:
+        name: NetworkManager
+        state: restarted
+      when: ansible_facts.os_family == "RedHat"

@@ -1,0 +1,17 @@
+---
+- name: Edit /etc/hosts file with variables
+  hosts: all
+  become: true
+  vars:
+    hosts_entries:
+      - "192.168.1.100 mycustomhost.example.com mycustomhost"
+      - "192.168.1.101 anotherhost.example.com anotherhost"
+
+  tasks:
+    - name: Ensure custom entries are in /etc/hosts
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "{{ item }}"
+        state: present
+        create: yes
+      with_items: "{{ hosts_entries }}"

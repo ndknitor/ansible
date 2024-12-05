@@ -1,0 +1,55 @@
+---
+- name: Install Harbor Container Registry
+  hosts: "{{ host_group }}"
+  become: yes
+  vars:
+    harbor_version: "2.8.0"
+    harbor_installer_url: "https://github.com/goharbor/harbor/releases/download/v{{ harbor_version }}/harbor-online-installer-v{{ harbor_version }}.tgz"
+    harbor_install_dir: "/opt/harbor"
+    harbor_domain: "harbor.example.com"
+    harbor_admin_password: "admin123"
+
+  tasks:
+
+    - name: Ensure Docker is started and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Check if the directory exists
+      ansible.builtin.stat:
+        path: /path/to/directory
+      register: dir_stat
+
+    - name: Create Harbor directory
+      file:
+        path: "{{ harbor_install_dir }}"
+        state: directory
+        mode: '0755'
+      when: dir_stat.stat.exists    
+
+    - name: Download Harbor online installer
+      ansible.builtin.get_url:
+        url: "{{ harbor_installer_url }}"
+        dest: "/tmp/harbor-online-installer.tgz"
+        mode: '0644'
+      when: dir_stat.stat.exists
+
+    - name: Extract Harbor installer
+      ansible.builtin.unarchive:
+        src: /tmp/harbor-online-installer.tgz
+        dest: "{{ harbor_install_dir }}"
+        remote_src: yes
+      when: dir_stat.stat.exists
+
+    - name: Configure Harbor
+      ansible.builtin.template:
+        src: ./assets/harbor.yml.j2
+        dest: "{{ harbor_install_dir }}/harbor/harbor.yml"
+        mode: '0644'
+
+    - name: Install Harbor
+      ansible.builtin.shell: ./install.sh
+      args:
+        chdir: "{{ harbor_install_dir }}/harbor"
