@@ -5,7 +5,7 @@
 
 - import_playbook: ./installations/install_docker.yaml
   vars:
-    host_group: jenkins_servers
+    host_group: all
 
 - import_playbook: ./installations/install_trivy.yaml
   vars:

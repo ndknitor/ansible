@@ -16,7 +16,7 @@ all:
     jenkins_servers:
       hosts:
         machine1:
-    jenkins_agents:
+    utility_servers:
       hosts:
         machine2:
     k8s_servers:
@@ -24,3 +24,7 @@ all:
         machine3:
         machine4:
         machine5:
+
+    # jenkins_agents:
+    #   hosts:
+    #     machine2:

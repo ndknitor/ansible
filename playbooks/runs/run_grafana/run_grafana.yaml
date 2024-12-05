@@ -20,16 +20,16 @@
         dest: /opt/grafana/docker-compose.yml
         src: ./assets/docker-compose.yaml
 
-    - name: Create Prometheus for Grafana
-      file:
-        path: /opt/grafana/prometheus
-        state: directory
-        mode: '0755'
-
     - name: Add Prometheus configuration file
       copy:
         src: ./assets/prometheus.yml
-        dest: /opt/grafana/prometheus/prometheus.yml
+        dest: /opt/grafana/prometheus.yml
+
+    - name: Stop Grafana using Docker Compose
+      shell: |
+        docker compose down
+      args:
+        chdir: /opt/grafana
 
     - name: Start Grafana using Docker Compose
       shell: |

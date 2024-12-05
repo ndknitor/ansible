@@ -1,0 +1,26 @@
+---
+- name: Install Metricbeat using .deb package
+  hosts: all
+  become: true
+  tasks:
+    - name: Download Metricbeat .deb package
+      ansible.builtin.get_url:
+        url: https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-8.10.1-amd64.deb
+        dest: /tmp/metricbeat-8.10.1-amd64.deb
+        mode: '0644'
+
+    - name: Install Metricbeat .deb package
+      ansible.builtin.apt:
+        deb: /tmp/metricbeat-8.10.1-amd64.deb
+        update_cache: yes
+
+    - name: Enable and start Metricbeat service
+      ansible.builtin.systemd:
+        name: metricbeat
+        enabled: true
+        state: started
+
+    - name: Clean up .deb package
+      ansible.builtin.file:
+        path: /tmp/metricbeat-8.10.1-amd64.deb
+        state: absent
