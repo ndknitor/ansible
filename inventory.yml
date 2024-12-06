@@ -24,7 +24,3 @@ all:
         machine3:
         machine4:
         machine5:
-
-    # jenkins_agents:
-    #   hosts:
-    #     machine2:

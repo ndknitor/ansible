@@ -1,5 +1,3 @@
-- import_playbook: ./installations/install_harbor/install_harbor.yaml
+- import_playbook: ./installations/install_nginx/install_nginx.yaml
   vars:
-    host_group: utility_servers
-    harbor_domain: "harbor.example.com"
-    harbor_admin_password: "admin123"
+    host_group: k8s_servers

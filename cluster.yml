@@ -11,7 +11,7 @@ nodes:
   user: vagrant
   docker_socket: /var/run/docker.sock
   ssh_key: ""
-  ssh_key_path: /home/kn/Projects/Ansible/key
+  ssh_key_path: ./key
   ssh_cert: ""
   ssh_cert_path: ""
   labels: {}
@@ -25,7 +25,7 @@ nodes:
   user: vagrant
   docker_socket: /var/run/docker.sock
   ssh_key: ""
-  ssh_key_path: /home/kn/Projects/Ansible/key
+  ssh_key_path: ./key
   ssh_cert: ""
   ssh_cert_path: ""
   labels: {}
@@ -39,7 +39,7 @@ nodes:
   user: vagrant
   docker_socket: /var/run/docker.sock
   ssh_key: ""
-  ssh_key_path: /home/kn/Projects/Ansible/key
+  ssh_key_path: ./key
   ssh_cert: ""
   ssh_cert_path: ""
   labels: {}

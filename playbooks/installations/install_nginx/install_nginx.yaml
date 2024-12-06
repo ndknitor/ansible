@@ -27,8 +27,8 @@
 
     - name: Copy all .conf files from local to remote
       copy:
-        src: ../files/install_nginx/main.conf   # Copy all .conf files in this directory
-        dest: /etc/nginx/sites-enabled/      # Destination directory on remote machine
+        src: ./assets/sites-enabled/
+        dest: /etc/nginx/sites-enabled/
         owner: root
         group: root
         mode: '0644'

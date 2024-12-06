@@ -1,5 +1,5 @@
 ---
-######### ALL #########
+######## ALL #########
 - import_playbook: ./installations/install_node-exporter.yaml
   vars:
     host_group: all
@@ -8,7 +8,7 @@
   vars:
     host_group: all
 
-######### K8S #########
+######## K8S #########
 - import_playbook: ./init/post_server.yaml
   vars:
     host_group: k8s_servers
