@@ -20,7 +20,7 @@
     harbor_domain: "harbor.example.com"
     harbor_admin_password: "admin123"
 
-- import_playbook: ./installations/runs/run_grafana.yaml
+- import_playbook: ./runs/run_grafana/run_grafana.yaml
   vars:
     host_group: utility_servers
 
