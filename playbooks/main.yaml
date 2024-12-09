@@ -1,8 +1,19 @@
 ---
 ######## ALL #########
-- import_playbook: ./installations/install_node-exporter.yaml
-  vars:
-    host_group: all
+- name: Configure DNS for all machines
+  hosts: all
+  tasks:
+    - name: Add host entries for all machines
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "{{ hostvars[item]['ansible_host'] }} {{ item }} {{ hostvars[item]['ansible_hostname'] }}.local"
+        state: present
+      loop: "{{ groups['all'] }}"
+
+# - import_playbook: ./installations/install_node-exporter.yaml
+#   vars:
+#     host_group: all
 
 - import_playbook: ./installations/install_docker.yaml
   vars:
@@ -17,7 +28,7 @@
 - import_playbook: ./installations/install_harbor/install_harbor.yaml
   vars:
     host_group: utility_servers
-    harbor_domain: "harbor.example.com"
+    harbor_domain: "machine2"
     harbor_admin_password: "admin123"
 
 - import_playbook: ./runs/run_grafana/run_grafana.yaml
@@ -25,6 +36,7 @@
     host_group: utility_servers
 
 ######### Jenkins #########
+
 - import_playbook: ./installations/install_dotnetcore.yaml
   vars:
     host_group: jenkins_servers

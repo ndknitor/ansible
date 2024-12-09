@@ -1,3 +1,10 @@
-- import_playbook: ./installations/install_nginx/install_nginx.yaml
+# - import_playbook: ./installations/install_nginx/install_nginx.yaml
+#   vars:
+#     host_group: k8s_servers
+
+- import_playbook: ./init/docker_login.yaml
   vars:
-    host_group: k8s_servers
+    host_group: jenkins_servers
+    registry_url: machine2:8080
+    registry_username: admin
+    registry_password: admin123

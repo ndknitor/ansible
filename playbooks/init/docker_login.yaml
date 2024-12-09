@@ -1,0 +1,21 @@
+---
+- name: Check Docker service is running and enabled
+  hosts: "{{ host_group }}"
+  tasks:
+    - name: Ensure Docker service is running and enabled
+      become: true
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+- name: Docker login to registry
+  hosts: "{{ host_group }}"
+  tasks:
+    - name: Log into private registry
+      become: true
+      community.docker.docker_login:
+        registry_url: "{{ registry_url }}"
+        username: "{{ registry_username }}"
+        password: "{{ registry_password }}"
+        reauthorize: true
