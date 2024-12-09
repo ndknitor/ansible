@@ -1,3 +1,10 @@
 - import_playbook: ./installations/install_nginx/install_nginx.yaml
   vars:
     host_group: k8s_servers
+
+- import_playbook: ./init/docker_login.yaml
+  vars:
+    host_group: k8s_servers
+    registry_url: 192.168.5.111
+    username: admin
+    password: admin

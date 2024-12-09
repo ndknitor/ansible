@@ -1,0 +1,16 @@
+- name: Login Docker on Docker Servers
+  hosts: "{{ host_group }}"
+  become: true
+  tasks:
+    - name: Log in to Docker registry (optional)
+      community.docker.docker_login:
+        registry_url: "{{ registry_url }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+      when: registry_url is defined and username is defined and password is defined
+      register: login_result
+    # - name: Display login result if login attempted
+    #   ansible.builtin.debug:
+    #     msg: >
+    #       Login to {{ docker_registry_url }} was {{ login_result.changed | ternary('successful', 'unsuccessful') }}
+    #   when: login_result is defined
