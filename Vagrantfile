@@ -20,13 +20,6 @@ Vagrant.configure("2") do |config|
         sudo apt-get install -y openssh-server net-tools
 
         echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7erkt/64UZ8zRmP9St1oohJxZY9IRB8Q/OmrBU5Hkl kn@ndkn" >> /home/vagrant/.ssh/authorized_keys
-        echo "-----BEGIN OPENSSH PRIVATE KEY-----
-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-QyNTUxOQAAACBO3q5Lf+uFGfM0Zj/UrdaKIScWWPSEQfEPzpqwVOR5JQAAAJBh37vyYd+7
-8gAAAAtzc2gtZWQyNTUxOQAAACBO3q5Lf+uFGfM0Zj/UrdaKIScWWPSEQfEPzpqwVOR5JQ
-AAAEAUQz/gIRZEmwOeWg+BI1BH7DwF3BIUsiqB453SPNWYJk7erkt/64UZ8zRmP9St1ooh
-JxZY9IRB8Q/OmrBU5HklAAAAB2tuQG5ka24BAgMEBQY=
------END OPENSSH PRIVATE KEY-----" > /home/vagrant/.ssh/id_rsa
         
         mkdir -p $HOME/.bin
         echo 'export PATH=$PATH:/sbin:$HOME/.bin' >> /home/vagrant/.bashrc
