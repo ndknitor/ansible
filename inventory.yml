@@ -2,25 +2,25 @@ all:
   vars:
     username: vagrant
   hosts:
-    machine1:
+    jenkins.ndkn.local:
       ansible_host: 192.168.121.101
-    machine2:
+    utility.ndkn.local:
       ansible_host: 192.168.121.102
-    machine3:
+    k8s-m1.ndkn.local:
       ansible_host: 192.168.121.103
-    machine4:
+    k8s-w1.ndkn.local:
       ansible_host: 192.168.121.104
-    machine5:
+    k8s-w2.ndkn.local:
       ansible_host: 192.168.121.105
   children:
     jenkins_servers:
       hosts:
-        machine1:
+        jenkins.ndkn.local:
     utility_servers:
       hosts:
-        machine2:
+        utility.ndkn.local:
     k8s_servers:
       hosts:
-        machine3:
-        machine4:
-        machine5:
+        k8s-m1.ndkn.local:
+        k8s-w1.ndkn.local:
+        k8s-w2.ndkn.local:

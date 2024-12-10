@@ -43,6 +43,16 @@
         remote_src: yes
       when: not dir_stat.stat.exists
 
+    - name: Copy key
+      ansible.builtin.copy:
+        src: ./assets/key.pem
+        dest: "{{ harbor_install_dir }}/harbor"
+
+    - name: Copy cert
+      ansible.builtin.copy:
+        src: ./assets/cert.pem
+        dest: "{{ harbor_install_dir }}/harbor"
+
     - name: Configure Harbor
       ansible.builtin.template:
         src: ./assets/harbor.yml.j2

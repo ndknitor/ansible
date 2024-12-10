@@ -3,12 +3,12 @@
   hosts: all
   become: true
   vars:
-    file_name : "cluster-ca.crt"
+    file_name : "ca.pem"
   tasks:
     - name: Copy the root CA certificate to the system
       copy:
         src: ./assets/{{ file_name }}   # Local path to your root CA certificate
-        dest: /usr/local/share/ca-certificates/{{ file_name }}
+        dest: /usr/local/share/ca-certificates/ca.crt
         mode: '0644'
 
     - name: Update CA certificates
@@ -20,7 +20,7 @@
       when: ansible_os_family == "RedHat"  # For RedHat/CentOS-based systems
 
     - name: Verify the root CA is installed (optional)
-      command: openssl x509 -in /usr/local/share/ca-certificates/{{ file_name }} -noout -text
+      command: openssl x509 -in /usr/local/share/ca-certificates/ca.crt -noout -text
       register: ca_check
       failed_when: ca_check.rc != 0
       changed_when: false

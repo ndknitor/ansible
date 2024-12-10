@@ -1,0 +1,10 @@
+- name: Configure DNS for all machines
+  hosts: all
+  tasks:
+    - name: Add host entries for all machines
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: "{{ hostvars[item]['ansible_host'] }} {{ item }}"
+        state: present
+      loop: "{{ groups['all'] }}"

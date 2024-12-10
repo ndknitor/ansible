@@ -1,2 +1,2 @@
-jenkins.knlab.local:8080,192.168.121.101
-jenkins2.knlab.local:8080,192.168.121.102
+utility.ndkn.local,192.168.121.102
+
