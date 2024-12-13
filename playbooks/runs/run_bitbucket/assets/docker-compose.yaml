@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  bitbucket:
+    image: atlassian/bitbucket:latest
+    container_name: bitbucket
+    ports:
+      - "7990:7990" # Web interface
+      - "7999:7999" # SSH access
+    environment:
+      - BITBUCKET_HOME=/var/atlassian/application-data/bitbucket
+    volumes:
+      - bitbucket_home:/var/atlassian/application-data/bitbucket
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13
+    container_name: postgres-bitbucket
+    environment:
+      POSTGRES_USER: bitbucket
+      POSTGRES_PASSWORD: bitbucket
+      POSTGRES_DB: bitbucket
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  bitbucket_home:
+    driver: local
+  postgres_data:
+    driver: local

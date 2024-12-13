@@ -1,0 +1,8 @@
+- name: Distribute public key to server
+  hosts: "{{ host_group }}"
+  tasks:
+    - name: Add the local public key to remote authorized_keys
+      ansible.builtin.authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ ssh_public_key }}"

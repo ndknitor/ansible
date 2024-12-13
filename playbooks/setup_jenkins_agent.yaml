@@ -15,5 +15,5 @@
 - import_playbook: install_jenkins_agent.yaml
   vars:
     host_group: jenkins_agents
-    jenkins_master: 192.168.121.101
+    jenkins_master: jenkins.ndkn.local
     secret: <secrets>

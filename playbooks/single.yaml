@@ -1,6 +1,7 @@
-- import_playbook: ./init/host_configuration.yaml
-  vars:
-    host_group: all
+# - import_playbook: ./installations/install_ssh_public_key.yaml
+#   vars:
+#     host_group: all
+#     ssh_public_key : ssh-rsa <publickey> kn@ndkn
 
 # - import_playbook: ./init/docker_login.yaml
 #   vars:
@@ -8,3 +9,11 @@
 #     registry_url: utility.ndkn.local
 #     registry_username: admin
 #     registry_password: admin123
+
+# - import_playbook: ./installations/install_docker.yaml
+#   vars:
+#     host_group: all
+
+- import_playbook: ./runs/run_gitea/run_gitea.yaml
+  vars:
+    host_group: all

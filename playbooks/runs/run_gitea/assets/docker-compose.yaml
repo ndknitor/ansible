@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=mysql
+      - DB_HOST=db:3306
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea_password
+      - APP_NAME=Gitea
+      - RUN_MODE=prod
+    volumes:
+      - ./gitea/data:/data
+    ports:
+      - "3000:3000" # HTTP access
+      - "2222:22"   # SSH access
+    restart: always
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    container_name: gitea_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=gitea_password
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    restart: always

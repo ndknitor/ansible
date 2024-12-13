@@ -1,8 +1,9 @@
-- name: Run Docker image on Docker
+- name: Run Bitbucket
   hosts: "{{ host_group }}"
   become: true
   vars:
-    install_dir : "/opt/project-name"
+    install_dir : "/opt/bitbucket"
+
   tasks:
     - name: Ensure Docker is started and enabled
       systemd:

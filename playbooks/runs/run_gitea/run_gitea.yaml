@@ -1,8 +1,9 @@
-- name: Run Docker image on Docker
+- name: Run Gitea
   hosts: "{{ host_group }}"
   become: true
   vars:
-    install_dir : "/opt/project-name"
+    install_dir : "/opt/gitea"
+
   tasks:
     - name: Ensure Docker is started and enabled
       systemd:
