@@ -1,7 +1,35 @@
-- name: Install Docker on Docker Servers
+---
+- name: Disable swap and enable IP forwarding
   hosts: "{{ host_group }}"
-  become: true
+  become: yes
   tasks:
+    - name: Disable swap temporarily
+      ansible.builtin.shell: swapoff -a
+
+    - name: Disable swap permanently by commenting out swap entry in fstab
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        regexp: '^\s*([^#\s]+)\s+swap\s+'
+        state: absent
+
+    - name: Ensure net.bridge.bridge-nf-call-ip6tables is set
+      lineinfile:
+        path: /etc/sysctl.conf
+        line: "net.bridge.bridge-nf-call-ip6tables=1"
+        state: present
+
+    - name: Ensure net.bridge.bridge-nf-call-iptables is set
+      lineinfile:
+        path: /etc/sysctl.conf
+        line: "net.bridge.bridge-nf-call-iptables=1"
+        state: present
+    
+    - name: Load module
+      ansible.builtin.shell: modprobe br_netfilter
+    
+    - name: Apply sysctl changes
+      command: sysctl -p
+
     - name: Update apt package list
       ansible.builtin.apt:
         update_cache: yes
@@ -31,7 +59,7 @@
 
     - name: Install Docker
       ansible.builtin.apt:
-        name: docker-ce
+        name: docker-ce=5:27.2.1-1~debian.12~bookworm
         state: present
       when: ansible_os_family == "Debian"
 
@@ -52,3 +80,6 @@
         groups:
           - docker
         append: yes
+
+    - name: Reboot
+      ansible.builtin.shell: reboot

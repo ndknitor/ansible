@@ -1,6 +1,36 @@
 # If you intended to deploy Kubernetes in an air-gapped environment,
 # please consult the documentation on how to configure custom RKE images.
 nodes:
+- address: 192.168.121.101
+  port: "22"
+  internal_address: ""
+  role:
+  - controlplane
+  - etcd
+  hostname_override: ""
+  user: vagrant
+  docker_socket: /var/run/docker.sock
+  ssh_key: ""
+  ssh_key_path: ./key
+  ssh_cert: ""
+  ssh_cert_path: ""
+  labels: {}
+  taints: []
+- address: 192.168.121.102
+  port: "22"
+  internal_address: ""
+  role:
+  - controlplane
+  - etcd
+  hostname_override: ""
+  user: vagrant
+  docker_socket: /var/run/docker.sock
+  ssh_key: ""
+  ssh_key_path: ./key
+  ssh_cert: ""
+  ssh_cert_path: ""
+  labels: {}
+  taints: []
 - address: 192.168.121.103
   port: "22"
   internal_address: ""
@@ -145,7 +175,7 @@ authentication:
 addons: ""
 addons_include: []
 system_images:
-  etcd: rancher/mirrored-coreos-etcd:v3.5.15
+  etcd: rancher/mirrored-coreos-etcd:v3.5.12
   alpine: rancher/rke-tools:v0.1.105
   nginx_proxy: rancher/rke-tools:v0.1.105
   cert_downloader: rancher/rke-tools:v0.1.105
@@ -154,16 +184,16 @@ system_images:
   dnsmasq: rancher/mirrored-k8s-dns-dnsmasq-nanny:1.23.0
   kubedns_sidecar: rancher/mirrored-k8s-dns-sidecar:1.23.0
   kubedns_autoscaler: rancher/mirrored-cluster-proportional-autoscaler:v1.8.9
-  coredns: rancher/mirrored-coredns-coredns:1.11.3
+  coredns: rancher/mirrored-coredns-coredns:1.11.1
   coredns_autoscaler: rancher/mirrored-cluster-proportional-autoscaler:v1.8.9
   nodelocal: rancher/mirrored-k8s-dns-node-cache:1.23.0
-  kubernetes: rancher/hyperkube:v1.31.2-rancher2
+  kubernetes: rancher/hyperkube:v1.30.7-rancher1
   flannel: rancher/mirrored-flannel-flannel:v0.25.1
   flannel_cni: rancher/flannel-cni:v1.4.1-rancher1
   calico_node: rancher/mirrored-calico-node:v3.28.1
   calico_cni: rancher/calico-cni:v3.28.1-rancher1
   calico_controllers: rancher/mirrored-calico-kube-controllers:v3.28.1
-  calico_ctl: rancher/mirrored-calico-ctl:v3.28.0
+  calico_ctl: rancher/mirrored-calico-ctl:v3.28.1
   calico_flexvol: rancher/mirrored-calico-pod2daemon-flexvol:v3.28.1
   canal_node: rancher/mirrored-calico-node:v3.28.1
   canal_cni: rancher/calico-cni:v3.28.1-rancher1
@@ -178,12 +208,12 @@ system_images:
   ingress_webhook: rancher/mirrored-ingress-nginx-kube-webhook-certgen:v1.4.1
   metrics_server: rancher/mirrored-metrics-server:v0.7.1
   windows_pod_infra_container: rancher/mirrored-pause:3.7
-  aci_cni_deploy_container: noiro/cnideploy:6.1.1.1.81c2369
-  aci_host_container: noiro/aci-containers-host:6.1.1.1.81c2369
-  aci_opflex_container: noiro/opflex:6.1.1.1.81c2369
-  aci_mcast_container: noiro/opflex:6.1.1.1.81c2369
-  aci_ovs_container: noiro/openvswitch:6.1.1.1.81c2369
-  aci_controller_container: noiro/aci-containers-controller:6.1.1.1.81c2369
+  aci_cni_deploy_container: noiro/cnideploy:6.0.4.4.81c2369
+  aci_host_container: noiro/aci-containers-host:6.0.4.4.81c2369
+  aci_opflex_container: noiro/opflex:6.0.4.4.81c2369
+  aci_mcast_container: noiro/opflex:6.0.4.4.81c2369
+  aci_ovs_container: noiro/openvswitch:6.0.4.4.81c2369
+  aci_controller_container: noiro/aci-containers-controller:6.0.4.4.81c2369
   aci_gbp_server_container: ""
   aci_opflex_server_container: ""
 ssh_key_path: ./key
