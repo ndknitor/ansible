@@ -1,0 +1,14 @@
+######### Utility #########
+- import_playbook: ./installations/install_harbor/install_harbor.yaml
+  vars:
+    host_group: utility_servers
+    harbor_domain: "utility.ndkn.local"
+    harbor_admin_password: "admin123"
+
+- import_playbook: ./runs/run_sonarqube/run_sonarqube.yaml
+  vars:
+    host_group: utility_servers
+
+# - import_playbook: ./runs/run_grafana/run_grafana.yaml
+#   vars:
+#     host_group: utility_servers

@@ -12,10 +12,6 @@ all:
       ansible_host: 192.168.121.104
     k8s-w2.ndkn.local:
       ansible_host: 192.168.121.105
-    k8s-w3.ndkn.local:
-      ansible_host: 192.168.121.106
-    k8s-w4.ndkn.local:
-      ansible_host: 192.168.121.107
   children:
     jenkins_servers:
       hosts:

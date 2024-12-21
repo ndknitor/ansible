@@ -1,0 +1,4 @@
+######## K8S RKE #########
+- import_playbook: ./init/rke_setup.yaml
+  vars:
+    host_group: k8s_servers
