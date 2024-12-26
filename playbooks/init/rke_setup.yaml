@@ -1,4 +1,3 @@
----
 - name: Disable swap and enable IP forwarding
   hosts: "{{ host_group }}"
   become: yes
@@ -82,4 +81,4 @@
         append: yes
 
     - name: Reboot
-      ansible.builtin.shell: reboot
+      ansible.builtin.reboot:

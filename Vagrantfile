@@ -2,13 +2,13 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/bookworm64"
 
-  (1..5).each do |i|
+  (1..2).each do |i|
     config.vm.define "d#{i}" do |node|
       # Set the hostname and VM name
       node.vm.hostname = "debian#{i}"
       node.vm.provider "libvirt" do |libvirt|
-        libvirt.memory = 2048
-        libvirt.cpus = 2
+        libvirt.memory = 4096
+        libvirt.cpus = 4
       end
 
       #node.vm.network "private_network", type: "dhcp" 
@@ -28,5 +28,4 @@ Vagrant.configure("2") do |config|
       SHELL
     end
   end
-
 end

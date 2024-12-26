@@ -17,3 +17,13 @@
 # - import_playbook: ./runs/run_gitea/run_gitea.yaml
 #   vars:
 #     host_group: all
+
+
+- import_playbook: ./installations/install_keepalived/install_keepalived.yaml
+  vars:
+    host_group: all
+    interface: eth1
+    auth_pass: "12345678"
+    vip: "192.168.121.100/24"
+    state: MASTER
+    router_id: 51

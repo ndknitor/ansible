@@ -1,0 +1,40 @@
+- name: Install keepalived
+  hosts: "{{ host_group }}"
+  become: true
+  vars:
+    base_priority: 100
+    decrement: 10
+  tasks:
+    - name: Ensure keepalived is installed
+      apt:
+        name: keepalived
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure keepalived is installed
+      yum:
+        name: keepalived
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Calculate priority dynamically based on inventory index
+      set_fact:
+        priority: "{{ base_priority - (groups[host_group.split(':') | join(':')].index(inventory_hostname) * decrement) }}"
+
+    - name: Show keepalived priority for each host
+      debug:
+        msg: "Priority for {{ inventory_hostname }} is {{ priority }}"
+
+    - name: Copy keepalived configuration
+      template:
+        src: ./assets/keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Ensure keepalived is running
+      systemd:
+        name: keepalived
+        state: restarted
+        enabled: true
