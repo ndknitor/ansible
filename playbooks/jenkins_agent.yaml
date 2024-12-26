@@ -1,0 +1,5 @@
+- import_playbook: install_jenkins_agent.yaml
+  vars:
+    host_group: jenkins_agents
+    jenkins_master: jenkins.ndkn.local
+    secret: <secrets>

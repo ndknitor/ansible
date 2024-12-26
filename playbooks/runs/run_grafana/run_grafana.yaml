@@ -37,7 +37,3 @@
       args:
         chdir: /opt/grafana
       register: command_output
-
-    - name: Display the command output
-      ansible.builtin.debug:
-        msg: "{{ command_output.stdout }}"

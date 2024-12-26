@@ -1,0 +1,28 @@
+- name: Run Sonar Qube image on Docker
+  hosts: "{{ host_group }}"
+  become: true
+  vars:
+    install_dir : "/opt/sonarqube"
+  tasks:
+    - name: Ensure Docker is started and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create directory for Docker Compose
+      file:
+        path: "{{ install_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create docker-compose.yaml
+      copy:
+        src: ./assets/docker-compose.yaml 
+        dest: "{{ install_dir }}/docker-compose.yaml"
+
+    - name: Start image using Docker Compose
+      shell: |
+        docker compose up -d
+      args:
+        chdir: "{{ install_dir }}"
