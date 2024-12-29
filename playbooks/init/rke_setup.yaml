@@ -16,12 +16,14 @@
         path: /etc/sysctl.conf
         line: "net.bridge.bridge-nf-call-ip6tables=1"
         state: present
+        register: ipv6_forward_status
 
     - name: Ensure net.bridge.bridge-nf-call-iptables is set
       lineinfile:
         path: /etc/sysctl.conf
         line: "net.bridge.bridge-nf-call-iptables=1"
         state: present
+        register: ipv4_forward_status
     
     - name: Load module
       ansible.builtin.shell: modprobe br_netfilter
@@ -82,3 +84,4 @@
 
     - name: Reboot
       ansible.builtin.reboot:
+      when: ipv4_forward_status == 0 || ipv6_forward_status == 0
