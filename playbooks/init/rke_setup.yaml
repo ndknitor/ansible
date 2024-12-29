@@ -2,6 +2,19 @@
   hosts: "{{ host_group }}"
   become: yes
   tasks:
+
+    - name: Check if IPv4 forwarding is disabled
+      ansible.builtin.command: sysctl net.ipv4.ip_forward
+      register: ipv4_forward_status
+
+    - name: Check if IPv6 forwarding is disabled
+      ansible.builtin.command: sysctl net.ipv6.conf.all.forwarding
+      register: ipv6_forward_status
+
+    # - name: Debug the value of net.ipv4.ip_forward
+    #   debug:
+    #     msg: "net.ipv4.ip_forward = {{ ipv4_forward_status.stdout }}"
+
     - name: Disable swap temporarily
       ansible.builtin.shell: swapoff -a
 
@@ -16,14 +29,12 @@
         path: /etc/sysctl.conf
         line: "net.bridge.bridge-nf-call-ip6tables=1"
         state: present
-        register: ipv6_forward_status
 
     - name: Ensure net.bridge.bridge-nf-call-iptables is set
       lineinfile:
         path: /etc/sysctl.conf
         line: "net.bridge.bridge-nf-call-iptables=1"
         state: present
-        register: ipv4_forward_status
     
     - name: Load module
       ansible.builtin.shell: modprobe br_netfilter
@@ -84,4 +95,4 @@
 
     - name: Reboot
       ansible.builtin.reboot:
-      when: ipv4_forward_status == 0 || ipv6_forward_status == 0
+      when: ipv4_forward_status.stdout == "net.ipv4.ip_forward = 0"

@@ -21,7 +21,7 @@
 
 - import_playbook: ./installations/install_keepalived/install_keepalived.yaml
   vars:
-    host_group: all
+    host_group: k8s_master_servers
     interface: eth1
     auth_pass: "12345678"
     vip: "192.168.121.100/24"
