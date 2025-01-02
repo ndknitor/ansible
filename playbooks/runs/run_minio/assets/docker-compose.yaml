@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  asptemplate:
+    image: ndknitor/asp-template
+    container_name: asptemplate
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      main_net:
+        ipv4_address: 172.20.0.10  # Static IP 
+
+networks:
+  main_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+
+#     ports:
+#       - "9200:9200"
+#     volumes:
+#       - es_data:/usr/share/elasticsearch/data
+# volumes:
+#   es_data:
+#     driver: local

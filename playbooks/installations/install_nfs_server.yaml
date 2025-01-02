@@ -1,0 +1,32 @@
+- name: Set up NFS server
+  hosts: nfs_server
+  become: true
+  vars:
+    nfs_export_path: "{{ nfs_export_path }}"
+    nfs_allowed_subnet: "{{ nfs_allowed_subnet }}"
+  tasks:
+    - name: Install NFS server package
+      apt:
+        name: nfs-kernel-server
+        state: present
+        update_cache: true
+
+    - name: Create export directory
+      file:
+        path: "{{ nfs_export_path }}"
+        state: directory
+        owner: nobody
+        group: nogroup
+        mode: '0777'
+
+    - name: Configure NFS exports
+      lineinfile:
+        path: /etc/exports
+        line: "{{ nfs_export_path }} {{ nfs_allowed_subnet }}(rw,sync,no_subtree_check)"
+        state: present
+
+    - name: Restart NFS service
+      service:
+        name: nfs-kernel-server
+        state: restarted
+        enabled: true
